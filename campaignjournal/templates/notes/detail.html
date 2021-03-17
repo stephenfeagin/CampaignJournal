@@ -4,6 +4,8 @@
 
 {% block content %}
 
+<small>Created: {{ nt.created|datetimeformat }}</small>&nbsp;
+<small>Updated: {{ nt.updated|datetimeformat }}</small><br>
 <a class="btn btn-primary" href="{{ url_for('notes.note_edit', slug=nt.slug) }}">Edit</a>
 <hr>
 <div class="container">
