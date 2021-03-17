@@ -4,13 +4,17 @@
 
 {% block content %}
 
+<a class="btn btn-primary" href="{{ url_for('notes.note_edit', slug=nt.slug) }}">Edit</a>
+<hr>
+<div class="container">
+
 <section id="note-notes">
     {% if nt.notes %}
         <h2>Notes</h2>
         <div class="notes" id="note-notes"></div>
     {% endif %}
 </section>
-    
+</div>    
 <hr>
 <form action="{{ url_for('notes.note_delete', slug=nt.slug) }}" method="post">
     <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">
