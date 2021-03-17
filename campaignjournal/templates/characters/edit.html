@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="" method="post">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" value="{{ char.name }}" class="form-control"><br>
+
+    <label for="notes">Notes</label>
+    <textarea id="notes" name="notes" rows="10" cols="50" class="form-control">{{ char.notes }}</textarea><br>
+
+    <label for="location">Location</label>
+    <select name="location" id="location" class="form-control">
+        <option value="null">---</option>
+        {% for loc in locs %}
+        <option value="{{ loc.slug }}" {% if loc.name == char.location.name %}selected{% endif %}>{{ loc.name }}</option>
+        {% endfor %}
+    </select><br>
+
+    <button class="btn btn-primary" type="submit">Save</button>
+    <button class="btn btn-secondary" href="{{ url_for('characters.char_detail', slug=char.slug) }}">Cancel</button>
+
+    <hr>
+    <form action="{{ url_for('characters.char_delete', slug=char.slug) }}" method="post">
+        <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">
+    </form>
+</form>
+
+{% endblock content %}

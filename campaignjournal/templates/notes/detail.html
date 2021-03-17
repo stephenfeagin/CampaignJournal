@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block header %}<h1>{% block title %}{{ nt.name }}{% endblock title %}</h1>{% endblock header %}
+
+{% block content %}
+
+<section id="note-notes">
+    {% if nt.notes %}
+        <h2>Notes</h2>
+        <div class="notes" id="note-notes"></div>
+    {% endif %}
+</section>
+    
+    
+{% endblock content %}
+
+{% block js %}
+{{ super() }}
+{% if nt.notes %}
+<script>
+document.getElementById("note-notes").innerHTML = DOMPurify.sanitize(`{{ nt.notes|safe }}`);
+</script>
+{% endif %}
+{% endblock js %}

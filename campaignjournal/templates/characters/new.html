@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Add Character</h1>
+
+<form method="post">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name"><br>
+
+    <label for="notes">Notes</label>
+    <textarea name="notes" id="notes" cols="30" rows="10"></textarea><br>
+
+    <label for="location">Location</label>
+    <select name="location" id="location">
+            <option value="null">---</option>
+        {% for loc in locs %}
+            <option value="{{ loc.slug }}">{{ loc.name }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="submit" value="Save">
+</form>
+
+{% endblock content %}

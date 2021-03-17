@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}<h1>{% block title %}{{ loc.name }}{% endblock title %}</h1>{% endblock header %}
+
+{% block content %}
+
+<div class="container">
+
+<a class="btn btn-primary" href="{{ url_for('locations.loc_edit', slug=loc.slug) }}">Edit</a>
+<hr>
+
+<article>
+<section id="loc-notes">
+    {% if loc.notes %}
+        <h2>Notes</h2>
+        <div class="notes" id="loc-notes"></div>
+    {% endif %}
+</section>
+    
+<section id="loc-chars">
+    <h2>Notable Characters</h2>
+    {% if chars %}
+    <ul>
+        {% for char in chars %}
+        <li><a href="{{ url_for('characters.char_detail', slug=char.slug) }}">{{ char.name }}</a></li>    
+        {% endfor %}
+    </ul>
+    {% else %}
+    No notable characters in this location.
+    {% endif %}
+</section>
+
+</article>
+</div> <!-- .container -->
+    
+{% endblock content %}
+
+{% block js %}
+{{ super() }}
+{% if loc.notes %}
+<script>
+document.getElementById("loc-notes").innerHTML = DOMPurify.sanitize(`{{ loc.notes|safe }}`);
+</script>
+{% endif %}
+{% endblock js %}

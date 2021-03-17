@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}CampaignJournal Home{% endblock title %}</h1>
+{% endblock header %}
+
+{% block content %}
+
+<div class="container">
+
+<div class="row">
+    <div class="col">
+        <h3>Locations</h3>
+        <ul>
+        {% for loc in all_locs %}
+            <li><a href="{{ url_for('locations.loc_detail', slug=loc.slug) }}">{{ loc.name }}</a></li>
+        {% endfor %}
+        </ul>
+    </div><!-- .col -->
+
+    <div class="col">
+        <h3>Characters</h3>
+        <ul>
+            {% for char in all_chars %}
+                <li><a href="{{ url_for('characters.char_detail', slug=char.slug) }}">{{ char.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div><!-- .row -->
+
+
+
+</div>
+{% endblock content %}

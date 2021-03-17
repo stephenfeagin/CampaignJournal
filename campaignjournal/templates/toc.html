@@ -1,0 +1,17 @@
+<details open>
+    <summary>Locations</summary>
+    <ul id="tocLocList">
+    {% for loc in all_locs %}
+        <li><a href="{{ url_for('locations.loc_detail', slug=loc.slug) }}">{{ loc.name }}</a></li>
+    {% endfor %}
+    </ul>
+</details> 
+
+<details open>
+    <summary>Characters</summary>
+    <ul id="tocCharList">
+        {% for char in all_chars %}
+            <li><a href="{{ url_for('characters.char_detail', slug=char.slug) }}">{{ char.name }}</a></li>
+        {% endfor %}
+    </ul>
+</details>

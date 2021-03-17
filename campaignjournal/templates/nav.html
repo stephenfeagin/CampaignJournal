@@ -1,0 +1,67 @@
+<nav class="navbar navbar-light bg-light">
+    <ul class="nav">
+        <a href="{{ url_for('core.index') }}" class="navbar-brand">CampaignJournal</a>
+        
+        <!-- Characters -->
+        <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle"
+               id="char-dropdown" 
+               role="button" 
+               data-toggle="dropdown" 
+               aria-haspopup="true" 
+               aria-expanded="false">
+            Characters
+            </a>
+            <div class="dropdown-menu" aria-labelledby="char-dropdown">
+                <a href="{{ url_for('characters.char_list') }}" class="dropdown-item">All characters</a>
+                <a href="{{ url_for('characters.char_new') }}" class="dropdown-item">New character</a>
+            </div>
+        </li>
+        
+        <!-- Locations -->
+        <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle"
+               id="loc-dropdown" 
+               role="button" 
+               data-toggle="dropdown" 
+               aria-haspopup="true" 
+               aria-expanded="false">
+            Locations
+            </a>
+            <div class="dropdown-menu" aria-labelledby="loc-dropdown">
+                <a href="{{ url_for('locations.loc_list') }}" class="dropdown-item">All locations</a>
+                <a href="{{ url_for('locations.loc_new') }}" class="dropdown-item">New location</a>
+            </div>
+        </li>
+        
+        <!-- Notes -->
+        <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle"
+               id="note-dropdown" 
+               role="button" 
+               data-toggle="dropdown" 
+               aria-haspopup="true" 
+               aria-expanded="false">
+            Notes
+            </a>
+            <div class="dropdown-menu" aria-labelledby="note-dropdown">
+                <a href="{{ url_for('notes.note_list') }}" class="dropdown-item">All notes</a>
+                <a href="{{ url_for('notes.note_new') }}" class="dropdown-item">New note</a>
+            </div>
+        </li>
+    </ul>
+    <ul class="nav">
+        {% if g.user %}
+        <li class="nav-item">
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">Log Out</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a href="{{ url_for('auth.register') }}" class="nav-link">Register</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ url_for('auth.login') }}" class="nav-link">Log In</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>

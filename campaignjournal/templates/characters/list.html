@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Characters{% endblock title %}</h1>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('characters.char_new') }}">New Character</a>
+    <hr>
+{% endblock header %}
+
+{% block content %}
+
+<ul>
+{% for char in chars %}
+    <li><a href="{{ url_for('characters.char_detail', slug=char.slug) }}">{{ char.name }}</a>
+        {% if char.location %}
+        <ul><li><a href="{{ url_for('locations.loc_detail', slug=char.location.slug) }}" >{{ char.location.name }}</a></li></ul>
+        {% endif %}
+        </li>
+{% endfor %}
+</ul>
+
+{% endblock content %}

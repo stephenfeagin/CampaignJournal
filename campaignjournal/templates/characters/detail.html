@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block header %}<h1>{% block title %}{{ char.name }}{% endblock title %}</h1>{% endblock header %}
+
+{% block content %}
+
+<div class="container">
+    
+<a class="btn btn-primary" href="{{ url_for('characters.char_edit', slug=char.slug) }}">Edit</a>
+<hr>
+
+<article>
+
+<section id="keyInfo">
+<details open>
+<summary class="detailSummary"><h2>Key Information</h2></summary>
+<div class="card card-body">
+    <ul>
+        <li><strong>Location:</strong>
+        {% if char.location %}
+        <a href="{{ url_for('locations.loc_detail', slug=char.location.slug) }}">
+            {{ char.location.name }}
+        </a>
+        {% else %}
+        None
+        {% endif %}
+        </li>
+        <li><strong>Race: </strong></li>
+        <li><strong>Class: </strong></li>
+    </ul>
+</div>
+</details>  
+</section><!-- #keyInfo -->
+
+<section id="notes">
+<details open>
+    <summary class="detailSummary"><h2>Notes</h2></summary>
+    <div class="card card-body" id="charNotes"></div>
+</details>
+</section><!-- #notes -->
+
+</article>
+</div><!-- .container -->
+
+{% endblock content %}
+
+{% block js %}
+{{ super() }}
+{% if char.notes %}
+<script>
+    document.getElementById("charNotes").innerHTML = DOMPurify.sanitize(`{{ char.notes|safe }}`);
+</script>
+{% endif %}
+{% endblock js %}

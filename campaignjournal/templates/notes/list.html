@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Notes{% endblock title %}</h1>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('notes.note_new') }}">New Note</a>
+    <hr>
+{% endblock header %}
+
+{% block content %}
+
+{% for n in nts %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><a href="{{ url_for('notes.note_detail', slug=n.slug ) }}">{{ n.name }}</a></h5>
+        <h6 class="card-subtitle text-muted mb-2">Created: {{ n.created|datetimeformat }}</h6>
+        <h6 class="card-subtitle text-muted mb-2">Updated: {{ n.updated|datetimeformat }}</h6>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock content %}
