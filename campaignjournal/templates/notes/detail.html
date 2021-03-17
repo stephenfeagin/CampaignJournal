@@ -11,6 +11,10 @@
     {% endif %}
 </section>
     
+<hr>
+<form action="{{ url_for('notes.note_delete', slug=nt.slug) }}" method="post">
+    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">
+</form>
     
 {% endblock content %}
 

@@ -33,6 +33,11 @@
 </article>
 </div> <!-- .container -->
     
+<hr>
+<form action="{{ url_for('locations.loc_delete', slug=loc.slug) }}" method="post">
+    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">
+</form>
+
 {% endblock content %}
 
 {% block js %}
