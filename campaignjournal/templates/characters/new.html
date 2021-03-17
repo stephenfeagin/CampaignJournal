@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
+{% block header %}
+<h1>{% block title %}New Character{% endblock title %}</h1>
+{% endblock header %}
+
 {% block content %}
 
-<h1>Add Character</h1>
 
 <form method="post">
     <label for="name">Name</label>

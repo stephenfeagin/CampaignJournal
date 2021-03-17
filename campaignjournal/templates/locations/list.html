@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}<h1>{% block title %}Locations{% endblock title %}</h1>
-<a class="btn btn-primary btn-lg" href="{{ url_for('location.loc_new') }}">New Location</a>
+<a class="btn btn-primary btn-lg" href="{{ url_for('locations.loc_new') }}">New Location</a>
 <hr>
 {% endblock header %}
 
@@ -9,7 +9,7 @@
 
 <ul>
   {% for loc in locs %}
-    <li><a href="{{ url_for('location.loc_detail', slug=loc.slug) }}">{{ loc.name }}</a></li>  
+    <li><a href="{{ url_for('locations.loc_detail', slug=loc.slug) }}">{{ loc.name }}</a></li>  
   {% endfor %}
 </ul>
 

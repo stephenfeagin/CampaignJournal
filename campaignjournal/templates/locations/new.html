@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
+{% block header %}
+<h1>{% block title %}New Location{% endblock title %}</h1>
+{% endblock header %}
 {% block content %}
-
-<h1>Add Location</h1>
 
 <form method="post">
     <label for="name">Name</label>
