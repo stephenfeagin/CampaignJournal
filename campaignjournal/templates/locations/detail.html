@@ -6,10 +6,12 @@
 
 {% block content %}
 
-<div class="container">
-
+<small>Created: {{ loc.created|datetimeformat }}</small>&nbsp;
+<small>Updated: {{ loc.updated|datetimeformat }}</small><br>
 <a class="btn btn-primary" href="{{ url_for('locations.loc_edit', slug=loc.slug) }}">Edit</a>
 <hr>
+<div class="container">
+
 
 <article>
 <section id="loc-notes">

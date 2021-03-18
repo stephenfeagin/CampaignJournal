@@ -35,8 +35,8 @@ def create_app(test_config=None) -> Flask:
 
     @app.context_processor
     def inject_documents():
-        all_locs = documents.Location.objects().order_by("name")
-        all_chars = documents.Character.objects().order_by("name")
+        all_locs = documents.Location.objects()
+        all_chars = documents.Character.objects()
         return dict(all_locs=all_locs, all_chars=all_chars)
 
     return app

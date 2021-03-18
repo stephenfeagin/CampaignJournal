@@ -6,10 +6,12 @@
 
 {% block content %}
 
-<div class="container">
-    
+<small>Created: {{ char.created|datetimeformat }}</small>&nbsp;
+<small>Updated: {{ char.updated|datetimeformat }}</small><br>
 <a class="btn btn-primary" href="{{ url_for('characters.char_edit', slug=char.slug) }}">Edit</a>
 <hr>
+
+<div class="container">
 
 <article>
 
