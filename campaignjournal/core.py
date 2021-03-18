@@ -23,12 +23,15 @@ def match_to_url(m: re.Match) -> str:
     """
     match_to_url converts a regex Match object into a resolved URL
     """
-    category, name = m.groups()
     url_patterns = {
         "location": "locations.loc_detail",
         "character": "characters.char_detail",
         "npc": "characters.char_detail",
     }
+
+    category, name, display = m.groups()
+    if display is None:
+        display = name
 
     url = url_patterns.get(category.lower())
     if url is None:
@@ -36,7 +39,7 @@ def match_to_url(m: re.Match) -> str:
 
     slug = slugify(name)
     full_url = url_for(url, slug=slug)
-    markdown_link = f"[{name}]({full_url})"
+    markdown_link = f"[{display}]({full_url})"
     return markdown_link
 
 
@@ -45,7 +48,7 @@ def convert_markdown(text: str) -> str:
     convert_link converts all of the supported wiki-style links in a text into resolved URLs
         and returns the entire text, markdownified
     """
-    link_pattern = re.compile(r"\[\[([\w\s]+)\s?:\s?([\w\s]+)\]\]")
+    link_pattern = re.compile(r"\[\[([\w\s]+)\s?:\s?([\w\s]+):?([\w\s]+)?\]\]")
     replaced = link_pattern.sub(match_to_url, text)
     return markdown.markdown(replaced)
 
