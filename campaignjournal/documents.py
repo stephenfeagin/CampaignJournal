@@ -32,7 +32,7 @@ class Character(BaseDocument):
     name = StringField(required=True, unique=True, max_length=64)
     location = ReferenceField("Location")
     notes = StringField()
-    dead = BooleanField(default=False)
+    alive = BooleanField(default=True)
 
     meta = {"ordering": ["name"]}
 
