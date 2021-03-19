@@ -3,7 +3,8 @@ from typing import NoReturn, Union
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from .auth import login_required
-from .core import convert_markdown, slugify
+from .core import slugify
+from .doclinks import render_markdown
 from .documents import Character, Location
 
 bp = Blueprint("characters", __name__, url_prefix="/characters")
@@ -23,7 +24,7 @@ def char_list():
 @bp.route("/<slug>")
 def char_detail(slug):
     char = get_char(slug)
-    char.notes = convert_markdown(char.notes)
+    char.notes = render_markdown(char.notes)
     return render_template("characters/detail.html", char=char)
 
 
