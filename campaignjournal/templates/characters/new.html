@@ -6,22 +6,11 @@
 
 {% block content %}
 
-
 <form method="post">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name"><br>
-
-    <label for="notes">Notes</label>
-    <textarea name="notes" id="notes" cols="30" rows="10"></textarea><br>
-
-    <label for="location">Location</label>
-    <select name="location" id="location">
-            <option value="null">---</option>
-        {% for loc in locs %}
-            <option value="{{ loc.slug }}">{{ loc.name }}</option>
-        {% endfor %}
-    </select>
-
+    {{ form.csrf_token }}
+    <div>{{ form.name.label }} {{ form.name }}</div>
+    <div>{{ form.notes.label }} {{ form.notes(rows=10, cols=50) }}</div>
+    <div>{{ form.location.label }} {{ form.location }}</div>
     <input type="submit" value="Save">
 </form>
 

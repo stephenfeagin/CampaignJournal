@@ -21,17 +21,11 @@ class BaseDocument(Document):
 
     meta = {"abstract": True}
 
-    def set_updated(self) -> NoReturn:
-        self.updated = datetime.utcnow()
-
-    def set_slug(self) -> NoReturn:
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-
-    @classmethod
-    def pre_save_post_validate(cls, sender, document, **kwargs) -> NoReturn:
-        set_updated(document)
-        set_slug(document)
+        self.updated = datetime.utcnow()
+        super(Document, self).save(*args, **kwargs)
 
 
 class Character(BaseDocument):

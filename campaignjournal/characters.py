@@ -1,6 +1,9 @@
 from typing import NoReturn, Union
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_wtf import FlaskForm
+from wtforms.fields import SelectField, StringField, TextAreaField
+from wtforms.validators import InputRequired
 
 from .auth import login_required
 from .core import convert_markdown, slugify
@@ -11,6 +14,12 @@ bp = Blueprint("characters", __name__, url_prefix="/characters")
 
 def get_char(slug: str) -> Union[Character, NoReturn]:
     return Character.objects.get_or_404(slug__iexact=slug)
+
+
+class CharacterForm(FlaskForm):
+    name = StringField(validators=[InputRequired()])
+    notes = TextAreaField()
+    location = SelectField()
 
 
 @bp.route("/")
@@ -30,16 +39,18 @@ def char_detail(slug):
 @bp.route("/new", methods=("GET", "POST"))
 @login_required
 def char_new():
-    if request.method == "POST":
-        err = ""
-        if request.form.get("name") is None:
-            flash("Character name is required.")
-            return redirect(url_for("characters.char_new"))
-        char = Character(name=request.form["name"], notes=request.form.get("notes"))
+    form = CharacterForm()
+    form.location.choices = [("null", "---")] + [
+        (loc.slug, loc.name) for loc in Location.objects()
+    ]
+    if request.method == "POST" and form.validate_on_submit():
+        char = Character(name=form.name.data, notes=form.notes.data)
+        if form.location.data != "null":
+            char.location = Location.objects().get(slug__iexact=form.location.data)
         char.save()
         return redirect(url_for("characters.char_detail", slug=char.slug))
-    locs = Location.objects
-    return render_template("characters/new.html", locs=locs)
+
+    return render_template("characters/new.html", form=form)
 
 
 @bp.route("/<slug>/edit", methods=("GET", "POST"))
