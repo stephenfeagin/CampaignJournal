@@ -2,6 +2,9 @@ from datetime import datetime
 from typing import NoReturn, Union
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_wtf import FlaskForm
+from wtforms.fields import StringField, TextAreaField
+from wtforms.validators import InputRequired
 
 from .auth import login_required
 from .core import slugify
@@ -13,6 +16,11 @@ bp = Blueprint("notes", __name__, url_prefix="/notes")
 
 def get_note(slug: str) -> Union[Note, NoReturn]:
     return Note.objects.get_or_404(slug__iexact=slug)
+
+
+class NoteForm(FlaskForm):
+    name = StringField(validators=[InputRequired()])
+    notes = TextAreaField()
 
 
 @bp.route("/")
@@ -33,35 +41,25 @@ def note_detail(slug):
 @bp.route("/new", methods=("GET", "POST"))
 @login_required
 def note_new():
-    if request.method == "POST":
-        err = ""
-        if request.form.get("name") is None:
-            flash("Note name is required.")
-            return redirect(url_for("notes.note_new"))
-        nt = Note(
-            name=request.form["name"],
-            note_type=request.form.get("note_type"),
-            notes=request.form.get("notes"),
-        )
+    form = NoteForm()
+    if request.method == "POST" and form.validate_on_submit():
+        nt = Note(name=form.name.data, notes=form.notes.data)
         nt.save()
         return redirect(url_for("notes.note_detail", slug=nt.slug))
-    return render_template("notes/new.html")
+    return render_template("notes/new.html", form=form)
 
 
 @bp.route("/<slug>/edit", methods=("GET", "POST"))
 @login_required
 def note_edit(slug):
     nt = get_note(slug)
-    if request.method == "POST":
-        if request.form.get("name") and nt.name != request.form["name"]:
-            nt.name = request.form["name"]
-        if request.form.get("note_type") and nt.note_type != request.form["note_type"]:
-            nt.note_type = request.form["note_type"]
-        if request.form.get("notes") and nt.notes != request.form["notes"]:
-            nt.notes = request.form["notes"]
+    nt_data = nt.to_mongo()
+    form = NoteForm(data=nt_data)
+    if request.method == "POST" and form.validate_on_submit():
+        form.populate_obj(nt)
         nt.save()
         return redirect(url_for("notes.note_detail", slug=slug))
-    return render_template("notes/edit.html", nt=nt)
+    return render_template("notes/edit.html", nt=nt, form=form)
 
 
 @bp.route("/<slug>/delete", methods=("POST",))

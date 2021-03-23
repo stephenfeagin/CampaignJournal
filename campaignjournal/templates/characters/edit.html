@@ -14,8 +14,8 @@
     <div>{{ form.location.label }} {{ form.location }}</div>
     <div>{{ form.alive.label }} {{ form.alive }}</div>
     <input type="submit" value="Save">
-
 </form>
+
 <hr>
 <form action="{{ url_for('characters.char_delete', slug=char.slug) }}" method="post">
     <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">
