@@ -6,7 +6,8 @@ from wtforms.fields import StringField, TextAreaField
 from wtforms.validators import InputRequired
 
 from .auth import login_required
-from .core import convert_markdown, slugify
+from .core import slugify
+from .doclinks import render_markdown
 from .documents import Location, Character
 
 
@@ -33,7 +34,7 @@ def loc_list():
 def loc_detail(slug):
     loc = get_loc(slug)
     if loc.notes:
-        loc.notes = convert_markdown(loc.notes)
+        loc.notes = render_markdown(loc.notes)
     chars = Character.objects(location=loc)
     return render_template("locations/detail.html", loc=loc, chars=chars)
 

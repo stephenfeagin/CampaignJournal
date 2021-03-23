@@ -7,7 +7,8 @@ from wtforms.fields import BooleanField, SelectField, StringField, TextAreaField
 from wtforms.validators import InputRequired
 
 from .auth import login_required
-from .core import convert_markdown, slugify
+from .core import slugify
+from .doclinks import render_markdown
 from .documents import Character, Location
 
 bp = Blueprint("characters", __name__, url_prefix="/characters")
@@ -40,7 +41,7 @@ def char_list():
 @bp.route("/<slug>")
 def char_detail(slug):
     char = get_char(slug)
-    char.notes = convert_markdown(char.notes)
+    char.notes = render_markdown(char.notes)
     return render_template("characters/detail.html", char=char)
 
 
