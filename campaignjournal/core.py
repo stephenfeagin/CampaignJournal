@@ -56,4 +56,8 @@ def convert_markdown(text: str) -> str:
 
 @bp.add_app_template_filter
 def datetimeformat(dt: datetime) -> str:
-    return dt.strftime("%m/%d/%Y")
+    try:
+        result = dt.strftime("%m/%d/%Y")
+    except AttributeError:
+        result = "<N/A>"
+    return result

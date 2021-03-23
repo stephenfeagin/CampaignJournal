@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, NoReturn, Tuple, Union
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
@@ -50,7 +51,7 @@ def char_new():
     form.location.choices = get_loc_choices()
     if request.method == "POST" and form.validate_on_submit():
         char = Character(
-            name=form.name.data, notes=form.notes.data, dead=form.notes.data
+            name=form.name.data, notes=form.notes.data, alive=form.alive.data
         )
         if form.location.data != "null":
             char.location = Location.objects().get(slug__iexact=form.location.data)

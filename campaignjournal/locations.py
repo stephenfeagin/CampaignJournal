@@ -1,6 +1,9 @@
 from typing import NoReturn, Union
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_wtf import FlaskForm
+from wtforms.fields import StringField, TextAreaField
+from wtforms.validators import InputRequired
 
 from .auth import login_required
 from .core import convert_markdown, slugify
@@ -12,6 +15,11 @@ bp = Blueprint("locations", __name__, url_prefix="/locations")
 
 def get_loc(slug: str) -> Union[Location, NoReturn]:
     return Location.objects.get_or_404(slug__iexact=slug)
+
+
+class LocationForm(FlaskForm):
+    name = StringField(validators=[InputRequired()])
+    notes = TextAreaField()
 
 
 @bp.route("/")

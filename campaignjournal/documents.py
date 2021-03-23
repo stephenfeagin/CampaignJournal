@@ -16,14 +16,16 @@ from .core import slugify
 class BaseDocument(Document):
     name = StringField(required=True)
     slug = StringField()
-    created = DateTimeField(default=datetime.utcnow, required=True)
-    updated = DateTimeField(default=datetime.utcnow, required=True)
+    created = DateTimeField(required=True)
+    updated = DateTimeField(required=True)
 
     meta = {"abstract": True}
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        if not self.created:
+            self.created = datetime.utcnow()
         self.updated = datetime.utcnow()
         super(Document, self).save(*args, **kwargs)
 
