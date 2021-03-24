@@ -26,7 +26,7 @@ class NoteForm(FlaskForm):
 @bp.route("/")
 @bp.route("/all")
 def note_list():
-    nts = Note.objects().order_by("-updated")
+    nts = Note.objects()
     return render_template("notes/list.html", nts=nts)
 
 
