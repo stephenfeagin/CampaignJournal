@@ -8,7 +8,7 @@ from wtforms.validators import InputRequired
 from .auth import login_required
 from .core import slugify
 from .doclinks import render_markdown
-from .documents import Location, Character
+from .documents import Character, Location
 
 
 bp = Blueprint("locations", __name__, url_prefix="/locations")

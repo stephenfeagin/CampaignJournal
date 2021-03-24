@@ -1,8 +1,8 @@
 import os
 
+import markdown
 from flask import Flask
 from flask_mongoengine import MongoEngine
-import markdown
 
 from . import auth, characters, core, documents, locations, notes
 

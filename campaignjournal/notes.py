@@ -11,6 +11,7 @@ from .core import slugify
 from .doclinks import render_markdown
 from .documents import Note
 
+
 bp = Blueprint("notes", __name__, url_prefix="/notes")
 
 

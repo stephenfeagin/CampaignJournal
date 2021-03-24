@@ -2,8 +2,8 @@ import re
 from typing import NoReturn, Tuple, Union
 from xml.etree import ElementTree
 
-from flask import current_app, url_for
 import markdown
+from flask import current_app, url_for
 from markdown.inlinepatterns import InlineProcessor
 
 from .core import slugify
