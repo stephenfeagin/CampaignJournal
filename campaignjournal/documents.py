@@ -2,13 +2,7 @@ from datetime import datetime
 from typing import List, NoReturn
 
 from flask_mongoengine import Document
-from mongoengine import (
-    BooleanField,
-    DateTimeField,
-    ListField,
-    ReferenceField,
-    StringField,
-)
+from mongoengine import DateTimeField, ListField, ReferenceField, StringField
 
 from .core import slugify
 
@@ -34,7 +28,7 @@ class Character(BaseDocument):
     name = StringField(required=True, unique=True, max_length=64)
     location = ReferenceField("Location")
     notes = StringField()
-    alive = BooleanField(default=True)
+    alive = StringField(choices=(("a", "alive"), ("d", "dead")))
 
     meta = {"ordering": ["name"]}
 

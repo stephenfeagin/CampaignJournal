@@ -46,7 +46,7 @@ def note_new():
         nt = Note(name=form.name.data, notes=form.notes.data)
         nt.save()
         return redirect(url_for("notes.note_detail", slug=nt.slug))
-    return render_template("notes/new.html", form=form)
+    return render_template("notes/edit.html", pagetitle="New", form=form)
 
 
 @bp.route("/<slug>/edit", methods=("GET", "POST"))
@@ -59,7 +59,7 @@ def note_edit(slug):
         form.populate_obj(nt)
         nt.save()
         return redirect(url_for("notes.note_detail", slug=slug))
-    return render_template("notes/edit.html", nt=nt, form=form)
+    return render_template("notes/edit.html", pagetitle="Edit", nt=nt, form=form)
 
 
 @bp.route("/<slug>/delete", methods=("POST",))

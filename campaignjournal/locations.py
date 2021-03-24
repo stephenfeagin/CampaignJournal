@@ -47,7 +47,7 @@ def loc_new():
         loc = Location(name=form.name.data, notes=form.notes.data)
         loc.save()
         return redirect(url_for("locations.loc_detail", slug=loc.slug))
-    return render_template("locations/new.html", form=form)
+    return render_template("locations/edit.html", pagetitle="New", form=form)
 
 
 @bp.route("/<slug>/edit", methods=("GET", "POST"))
@@ -60,7 +60,7 @@ def loc_edit(slug):
         form.populate_obj(loc)
         loc.save()
         return redirect(url_for("locations.loc_detail", slug=slug))
-    return render_template("locations/edit.html", loc=loc, form=form)
+    return render_template("locations/edit.html", pagetitle="Edit", loc=loc, form=form)
 
 
 @bp.route("/<slug>/delete", methods=("POST",))
