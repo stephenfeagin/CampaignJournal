@@ -1,6 +1,10 @@
-from typing import NoReturn, Union
+from datetime import datetime
+from typing import List, NoReturn, Tuple, Union
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_wtf import FlaskForm
+from wtforms.fields import RadioField, SelectField, StringField, TextAreaField
+from wtforms.validators import InputRequired
 
 from .auth import login_required
 from .core import slugify
@@ -12,6 +16,19 @@ bp = Blueprint("characters", __name__, url_prefix="/characters")
 
 def get_char(slug: str) -> Union[Character, NoReturn]:
     return Character.objects.get_or_404(slug__iexact=slug)
+
+
+def get_loc_choices() -> List[Tuple[str, str]]:
+    return [("null", "---")] + [(loc.slug, loc.name) for loc in Location.objects()]
+
+
+class CharacterForm(FlaskForm):
+    name = StringField(validators=[InputRequired()])
+    notes = TextAreaField()
+    location = SelectField()
+    alive = RadioField(
+        label="Alive or dead?", choices=(("a", "Alive"), ("d", "Dead")), default="a"
+    )
 
 
 @bp.route("/")
@@ -31,33 +48,42 @@ def char_detail(slug):
 @bp.route("/new", methods=("GET", "POST"))
 @login_required
 def char_new():
-    if request.method == "POST":
-        err = ""
-        if request.form.get("name") is None:
-            flash("Character name is required.")
-            return redirect(url_for("characters.char_new"))
-        char = Character(name=request.form["name"], notes=request.form.get("notes"))
+    form = CharacterForm()
+    form.location.choices = get_loc_choices()
+    if request.method == "POST" and form.validate_on_submit():
+        char = Character(
+            name=form.name.data, notes=form.notes.data, alive=form.alive.data
+        )
+        if form.location.data != "null":
+            char.location = Location.objects().get(slug__iexact=form.location.data)
         char.save()
         return redirect(url_for("characters.char_detail", slug=char.slug))
-    locs = Location.objects
-    return render_template("characters/new.html", locs=locs)
+
+    return render_template("characters/edit.html", pagetitle="New", form=form)
 
 
 @bp.route("/<slug>/edit", methods=("GET", "POST"))
 @login_required
 def char_edit(slug):
     char = get_char(slug)
-    if request.method == "POST":
-        if request.form.get("name") and char.name != request.form["name"]:
-            char.name = request.form["name"]
-        if request.form.get("notes") and char.notes != request.form["notes"]:
-            char.notes = request.form["notes"]
-        if request.form.get("location") != "null":
-            char.location = Location.objects.get(slug=request.form.get("location"))
+    char_data = char.to_mongo()
+    char_data["location"] = char.location.slug if char.location else "null"
+    form = CharacterForm(data=char_data)
+    form.location.choices = get_loc_choices()
+    if request.method == "POST" and form.validate_on_submit():
+        char.name = form.name.data
+        char.notes = form.notes.data
+        if form.location.data != "null":
+            if char.location and char.location.slug != form.location.data:
+                char.location = Location.objects().get(slug__iexact=form.location.data)
+        else:
+            char.location = None
+        char.alive = form.alive.data
         char.save()
         return redirect(url_for("characters.char_detail", slug=slug))
-    locs = Location.objects
-    return render_template("characters/edit.html", char=char, locs=locs)
+    return render_template(
+        "characters/edit.html", pagetitle="Edit", char=char, form=form
+    )
 
 
 @bp.route("/<slug>/delete", methods=("POST",))

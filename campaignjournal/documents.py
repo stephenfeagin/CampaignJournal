@@ -2,13 +2,7 @@ from datetime import datetime
 from typing import List, NoReturn
 
 from flask_mongoengine import Document
-from mongoengine import (
-    BooleanField,
-    DateTimeField,
-    ListField,
-    ReferenceField,
-    StringField,
-)
+from mongoengine import DateTimeField, ListField, ReferenceField, StringField
 
 from .core import slugify
 
@@ -16,29 +10,25 @@ from .core import slugify
 class BaseDocument(Document):
     name = StringField(required=True)
     slug = StringField()
-    created = DateTimeField(default=datetime.utcnow, required=True)
-    updated = DateTimeField(default=datetime.utcnow, required=True)
+    created = DateTimeField(required=True)
+    updated = DateTimeField(required=True)
 
     meta = {"abstract": True}
 
-    def set_updated(self) -> NoReturn:
-        self.updated = datetime.utcnow()
-
-    def set_slug(self) -> NoReturn:
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-
-    @classmethod
-    def pre_save_post_validate(cls, sender, document, **kwargs) -> NoReturn:
-        set_updated(document)
-        set_slug(document)
+        if not self.created:
+            self.created = datetime.utcnow()
+        self.updated = datetime.utcnow()
+        super(Document, self).save(*args, **kwargs)
 
 
 class Character(BaseDocument):
     name = StringField(required=True, unique=True, max_length=64)
     location = ReferenceField("Location")
     notes = StringField()
-    dead = BooleanField(default=False)
+    alive = StringField(choices=(("a", "alive"), ("d", "dead")))
 
     meta = {"ordering": ["name"]}
 

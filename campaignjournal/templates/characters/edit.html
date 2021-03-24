@@ -1,33 +1,52 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}Edit Character{% endblock title %}</h1>
+<h1>{% block title %}{{ pagetitle }} Character{% endblock title %}</h1>
 {% endblock header %}
 
 {% block content %}
 
+<div class="container">
 <form action="" method="post">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" value="{{ char.name }}" class="form-control"><br>
+    {{ form.csrf_token }}
 
-    <label for="notes">Notes</label>
-    <textarea id="notes" name="notes" rows="10" cols="50" class="form-control">{{ char.notes }}</textarea><br>
-
-    <label for="location">Location</label>
-    <select name="location" id="location" class="form-control">
-        <option value="null">---</option>
-        {% for loc in locs %}
-        <option value="{{ loc.slug }}" {% if loc.name == char.location.name %}selected{% endif %}>{{ loc.name }}</option>
+    <div class="form-group">
+        {{ form.name.label }}
+        {{ form.name(class_="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.notes.label }}
+        {{ form.notes(class_="form-control", rows=10)}}
+    </div>
+    <div class="form-group">
+        {{ form.location.label }}
+        {{ form.location(class_="form-control") }}
+    </div>
+    <div class="form-group">
+        {% for subfield in form.alive %}
+        <div class="form-check form-check-inline">
+            {{ subfield(class_="form-check-input") }}
+            {{ subfield.label(class_="form-check-label") }}
+        </div>
         {% endfor %}
-    </select><br>
-
-    <button class="btn btn-primary" type="submit">Save</button>
-    <button class="btn btn-secondary" href="{{ url_for('characters.char_detail', slug=char.slug) }}">Cancel</button>
-
-    <hr>
-    <form action="{{ url_for('characters.char_delete', slug=char.slug) }}" method="post">
-        <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">
-    </form>
+    </div>
+    <input class="btn btn-primary btn-lg mt-2" type="submit" value="Save">
+    {% if char is defined %}
+        {% set url = url_for('characters.char_detail', slug=char.slug) %}
+    {% else %}
+        {% set url = url_for('characters.char_list') %}
+    {% endif %}
+    <input type="button" name="cancel" value="Cancel"
+        onClick="window.location.href='{{ url }}'"
+        class="btn btn-seconday btn-lg mt-2">
 </form>
+</div>
+
+{% if pagetitle == "Edit" %}
+<hr>
+<form action="{{ url_for('characters.char_delete', slug=char.slug) }}" method="post">
+    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">
+</form>
+{% endif %}
 
 {% endblock content %}

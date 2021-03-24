@@ -1,31 +1,38 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}Edit Location{% endblock title %}</h1>
+<h1>{% block title %}{{ pagetitle }} Location{% endblock title %}</h1>
 {% endblock header %}
 
 {% block content %}
 
-<form action="" method="post">
+<div class="container">
+    {{ form.csrf_token }}
     <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" value="{{ loc.name }}" class="form-control"><br>
+        {{ form.name.label }}
+        {{ form.name(class_="form-control") }}
     </div>
+    <div class="form-group">
+        {{ form.notes.label }}
+        {{ form.notes(class_="form-control", rows=10) }}
+    </div>
+    <input class="btn btn-primary btn-lg mt-2" type="submit" value="Save">
+    {% if loc is defined %}
+        {% set url = url_for('locations.loc_detail', slug=loc.slug) %}
+    {% else %}
+        {% set url = url_for('locations.loc_list') %}
+    {% endif %}
+    <input type="button" name="cancel" value="Cancel"
+        onClick="window.location.href='{{ url }}'"
+        class="btn btn-seconday btn-lg mt-2">
+</div>
 
-    <div class="form-group">
-    <label for="notes">Notes</label>
-<textarea id="notes" name="notes" rows="10" cols="50" class="form-control">
-{% if loc.notes %}{{ loc.notes }}{% endif %}
-</textarea>
-    </div>
-
-    <div class="form-group">
-        <button class="btn btn-primary" type="submit">Save</button>
-        <button class="btn btn-secondary" href="{{ url_for('locations.loc_detail', slug=loc.slug) }}">Cancel</button>
-    </div>
-</form>
+{% if pagetitle == "Edit" %}
 <hr>
 <form action="{{ url_for('locations.loc_delete', slug=loc.slug) }}" method="post">
-    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">
+    <input type="submit" value="Delete" class="btn btn-danger"
+    onclick="return confirm('Are you sure?');">
 </form>
+{% endif %}
+
 {% endblock content %}

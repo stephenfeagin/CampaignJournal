@@ -1,6 +1,9 @@
 from typing import NoReturn, Union
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_wtf import FlaskForm
+from wtforms.fields import StringField, TextAreaField
+from wtforms.validators import InputRequired
 
 from .auth import login_required
 from .core import slugify
@@ -13,6 +16,11 @@ bp = Blueprint("locations", __name__, url_prefix="/locations")
 
 def get_loc(slug: str) -> Union[Location, NoReturn]:
     return Location.objects.get_or_404(slug__iexact=slug)
+
+
+class LocationForm(FlaskForm):
+    name = StringField(validators=[InputRequired()])
+    notes = TextAreaField()
 
 
 @bp.route("/")
@@ -34,29 +42,25 @@ def loc_detail(slug):
 @bp.route("/new", methods=("GET", "POST"))
 @login_required
 def loc_new():
-    if request.method == "POST":
-        err = ""
-        if request.form.get("name") is None:
-            flash("Location name is required.")
-            return redirect(url_for("locations.loc_new"))
-        loc = Location(name=request.form["name"], notes=request.form.get("notes"))
+    form = LocationForm()
+    if request.method == "POST" and form.validate_on_submit():
+        loc = Location(name=form.name.data, notes=form.notes.data)
         loc.save()
         return redirect(url_for("locations.loc_detail", slug=loc.slug))
-    return render_template("locations/new.html")
+    return render_template("locations/edit.html", pagetitle="New", form=form)
 
 
 @bp.route("/<slug>/edit", methods=("GET", "POST"))
 @login_required
 def loc_edit(slug):
     loc = get_loc(slug)
-    if request.method == "POST":
-        if request.form.get("name") and loc.name != request.form["name"]:
-            loc.name = request.form["name"]
-        if request.form.get("notes") and loc.notes != request.form["notes"]:
-            loc.notes = request.form["notes"]
+    loc_data = loc.to_mongo()
+    form = LocationForm(data=loc_data)
+    if request.method == "POST" and form.validate_on_submit():
+        form.populate_obj(loc)
         loc.save()
         return redirect(url_for("locations.loc_detail", slug=slug))
-    return render_template("locations/edit.html", loc=loc)
+    return render_template("locations/edit.html", pagetitle="Edit", loc=loc, form=form)
 
 
 @bp.route("/<slug>/delete", methods=("POST",))
