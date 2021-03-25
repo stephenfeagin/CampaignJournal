@@ -22,15 +22,13 @@
     <ul>
         <li><strong>Location:</strong>
         {% if char.location %}
-        <a href="{{ url_for('locations.loc_detail', slug=char.location.slug) }}">
-            {{ char.location.name }}
-        </a>
-        {% else %}
-        None
+            <a href="{{ url_for('locations.loc_detail', slug=char.location.slug) }}">
+                {{ char.location.name }}
+            </a>
         {% endif %}
         </li>
-        <li><strong>Race: </strong></li>
-        <li><strong>Class: </strong></li>
+        <li><strong>Race: </strong>{% if char.race %}{{ char.race }}{% endif %}</li>
+        <li><strong>Class: </strong>{% if char.class_ %}{{ char.class_ }}{% endif %}</li>
         <li><strong>Alive?</strong> {% if char.alive == "a" %}Yes{% else %}No{% endif %}</li>
     </ul>
 </div>

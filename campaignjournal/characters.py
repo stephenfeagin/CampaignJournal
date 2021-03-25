@@ -24,6 +24,8 @@ def get_loc_choices() -> List[Tuple[str, str]]:
 
 class CharacterForm(FlaskForm):
     name = StringField(validators=[InputRequired()])
+    race = StringField()
+    class_ = StringField("Class")
     notes = TextAreaField()
     location = SelectField()
     alive = RadioField(
@@ -51,9 +53,7 @@ def char_new():
     form = CharacterForm()
     form.location.choices = get_loc_choices()
     if request.method == "POST" and form.validate_on_submit():
-        char = Character(
-            name=form.name.data, notes=form.notes.data, alive=form.alive.data
-        )
+        form.populate_obj(char)
         if form.location.data != "null":
             char.location = Location.objects().get(slug__iexact=form.location.data)
         char.save()
@@ -71,14 +71,11 @@ def char_edit(slug):
     form = CharacterForm(data=char_data)
     form.location.choices = get_loc_choices()
     if request.method == "POST" and form.validate_on_submit():
-        char.name = form.name.data
-        char.notes = form.notes.data
+        form.populate_obj(char)
         if form.location.data != "null":
-            if char.location and char.location.slug != form.location.data:
-                char.location = Location.objects().get(slug__iexact=form.location.data)
+            char.location = Location.objects().get(slug__iexact=form.location.data)
         else:
             char.location = None
-        char.alive = form.alive.data
         char.save()
         return redirect(url_for("characters.char_detail", slug=slug))
     return render_template(
