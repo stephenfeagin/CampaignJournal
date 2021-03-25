@@ -8,15 +8,17 @@
 <small>Updated: {{ nt.updated|datetimeformat }}</small><br>
 <a class="btn btn-primary" href="{{ url_for('notes.note_edit', slug=nt.slug) }}">Edit</a>
 <hr>
+
+<main class="note-main">
 <div class="container">
 
-<section id="note-notes">
+<section>
     {% if nt.notes %}
-        <h2>Notes</h2>
-        <div class="notes" id="note-notes"></div>
+        <div id="note-notes"></div>
     {% endif %}
 </section>
 </div>    
+</main>
 <hr>
 <form action="{{ url_for('notes.note_delete', slug=nt.slug) }}" method="post">
     <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">

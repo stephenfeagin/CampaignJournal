@@ -1,3 +1,14 @@
-summary.detailSummary {
-  display: block;
+body {
+  margin: auto 10%;
+}
+
+main h2 {
+  border-bottom: 1px solid gray;
+}
+
+#location-sidebar {
+  padding: 0.5rem;
+}
+#location-sidebar section {
+  padding-left: 1rem;
 }
