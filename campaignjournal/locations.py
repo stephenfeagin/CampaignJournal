@@ -44,8 +44,7 @@ def loc_detail(slug):
     loc = get_loc(slug)
     if loc.notes:
         loc.notes = render_markdown(loc.notes)
-    chars = Character.objects(location=loc)
-    return render_template("locations/detail.html", loc=loc, chars=chars)
+    return render_template("locations/detail.html", loc=loc)
 
 
 @bp.route("/new", methods=("GET", "POST"))
