@@ -10,11 +10,7 @@
 
 <ul>
 {% for char in chars %}
-    <li><a href="{{ url_for('characters.char_detail', slug=char.slug) }}">{{ char.name }}</a>
-        {% if char.location %}
-        <ul><li><a href="{{ url_for('locations.loc_detail', slug=char.location.slug) }}" >{{ char.location.name }}</a></li></ul>
-        {% endif %}
-        </li>
+    <li><a href="{{ url_for('characters.char_detail', slug=char.slug) }}">{{ char.name }}</a></li>
 {% endfor %}
 </ul>
 

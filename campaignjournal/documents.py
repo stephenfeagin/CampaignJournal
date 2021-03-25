@@ -27,6 +27,8 @@ class BaseDocument(Document):
 class Character(BaseDocument):
     name = StringField(required=True, unique=True, max_length=64)
     location = ReferenceField("Location")
+    class_ = StringField()
+    race = StringField()
     notes = StringField()
     alive = StringField(choices=(("a", "alive"), ("d", "dead")))
 

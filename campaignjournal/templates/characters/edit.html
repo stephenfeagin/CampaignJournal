@@ -15,6 +15,14 @@
         {{ form.name(class_="form-control") }}
     </div>
     <div class="form-group">
+        {{ form.race.label }}
+        {{ form.race(class_="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.class_.label }}
+        {{ form.class_(class_="form-control") }}
+    </div>
+    <div class="form-group">
         {{ form.notes.label }}
         {{ form.notes(class_="form-control", rows=10)}}
     </div>
