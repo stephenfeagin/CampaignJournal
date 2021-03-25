@@ -56,6 +56,8 @@ def char_new():
         form.populate_obj(char)
         if form.location.data != "null":
             char.location = Location.objects().get(slug__iexact=form.location.data)
+        else:
+            char.location = None
         char.save()
         return redirect(url_for("characters.char_detail", slug=char.slug))
 

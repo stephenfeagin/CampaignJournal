@@ -49,7 +49,7 @@ class Location(BaseDocument):
         return Location.objects(parent=self)
 
     def get_characters(self):
-        return Character.objects.get(location=self)
+        return Character.objects(location=self)
 
     def __repr__(self):
         return f"<Location: {self.name}>"

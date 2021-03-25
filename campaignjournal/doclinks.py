@@ -5,6 +5,7 @@ from xml.etree import ElementTree
 import markdown
 from flask import current_app, url_for
 from markdown.inlinepatterns import InlineProcessor
+from mdx_headdown import DowngradeHeadingsExtension
 
 from .core import slugify
 
@@ -64,5 +65,8 @@ class DocLinkExtension(markdown.Extension):
 def render_markdown(text: str) -> str:
     return markdown.markdown(
         text,
-        extensions=[DocLinkExtension(testing=current_app.config.get("TESTING", False))],
+        extensions=[
+            DocLinkExtension(testing=current_app.config.get("TESTING", False)),
+            DowngradeHeadingsExtension(),
+        ],
     )
