@@ -53,7 +53,12 @@ def loc_new():
     form = LocationForm()
     form.parent.choices = get_loc_choices()
     if request.method == "POST" and form.validate_on_submit():
-        loc = Location(name=form.name.data, notes=form.notes.data)
+        loc = Location()
+        form.populate_obj(loc)
+        if form.parent.data != "null":
+            loc.parent = Location.objects().get(slug__iexact=form.parent.data)
+        else:
+            loc.parent = None
         loc.save()
         return redirect(url_for("locations.loc_detail", slug=loc.slug))
     return render_template("locations/edit.html", pagetitle="New", form=form)
