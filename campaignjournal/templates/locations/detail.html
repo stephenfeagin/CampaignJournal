@@ -10,64 +10,59 @@
 <a class="btn btn-primary" href="{{ url_for('locations.loc_edit', slug=loc.slug) }}">Edit</a>
 <hr>
 
-<main class="location">
-<div class="container">    
-    
-<section>
-    {% if loc.parent %}
-    <p><strong>Parent location: </strong>
-        <a href="{{ url_for('locations.loc_detail', slug=loc.parent.slug) }}">
-            {{ loc.parent.name }}
-        </a>
-    </p>
-    {% else %} <p>No parent location</p>
-    {% endif %}
-</section>
-
-<section class="notes">
-    {% if loc.notes %}
-        <h2>Notes</h2>
-        <div class="container-fluid">
-            <div id="loc-notes"></div>
-        </div>
-    {% endif %}
-</section>
-
-<section>
-    <h2>Sub-Locations</h2>
-    {% with children = loc.get_children() %}
-        {% if children %}
+<div class="card float-md-left m-2 p-2">
+    <section>
+        <h3>Parent Location</h3>
+        {% if loc.parent %}
+            <a href="{{ url_for('locations.loc_detail', slug=loc.parent.slug) }}">
+                {{ loc.parent.name }}
+            </a>
+        </p>
+        {% else %} <p>No parent location</p>
+        {% endif %}
+    </section>
+    <section>
+        <h3>Sub-Locations</h3>
+        {% with children = loc.get_children() %}
+            {% if children %}
+                <ul>
+                {% for child in children %}
+                    <li>
+                        <a href="{{ url_for('locations.loc_detail', slug=child.slug) }}">{{ child.name }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+            <p>No sub-locations.</p>
+            {% endif %}
+        {% endwith %}
+    </section>
+    <section id="loc-chars">
+        <h3>Notable Characters</h3>
+        {% with chars = loc.get_characters() %}
+            {% if chars %}
             <ul>
-            {% for child in children %}
-                <li>
-                    <a href="{{ url_for('locations.loc_detail', slug=child.slug) }}">{{ child.name }}</a>
-                </li>
-            {% endfor %}
+                {% for char in chars %}
+                <li><a href="{{ url_for('characters.char_detail', slug=char.slug) }}">{{ char.name }}</a></li>    
+                {% endfor %}
             </ul>
-        {% else %}
-        No sub-locations.
-        {% endif %}
-    {% endwith %}
-</section>
+            {% else %}
+            <p>No notable characters in this location.</p>
+            {% endif %}
+        {% endwith %}
+    </section>
+</div>
     
-<section id="loc-chars">
-    <h2>Notable Characters</h2>
-    {% with chars = loc.get_characters() %}
-        {% if chars %}
-        <ul>
-            {% for char in chars %}
-            <li><a href="{{ url_for('characters.char_detail', slug=char.slug) }}">{{ char.name }}</a></li>    
-            {% endfor %}
-        </ul>
-        {% else %}
-        No notable characters in this location.
+<main>
+    <section class="notes p-2">
+        {% if loc.notes %}
+            <div class="container-fluid">
+                <div id="loc-notes"></div>
+            </div>
         {% endif %}
-    {% endwith %}
-</section>
-
-</div> <!-- .container -->
+    </section>
 </main>
-    
+
 <footer>
 <hr>
 <a class="btn btn-primary mb-2" href="{{ url_for('locations.loc_edit', slug=loc.slug) }}">Edit</a>

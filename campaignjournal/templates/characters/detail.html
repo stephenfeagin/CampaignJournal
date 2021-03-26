@@ -11,39 +11,54 @@
 <a class="btn btn-primary" href="{{ url_for('characters.char_edit', slug=char.slug) }}">Edit</a>
 <hr>
 
+<main>
 <div class="container">
 
 <article>
 
-<section id="keyInfo">
-<details open>
-<summary class="detailSummary"><h2>Key Information</h2></summary>
-<div class="card card-body">
-    <ul>
-        <li><strong>Location:</strong>
-        {% if char.location %}
-            <a href="{{ url_for('locations.loc_detail', slug=char.location.slug) }}">
-                {{ char.location.name }}
-            </a>
-        {% endif %}
-        </li>
-        <li><strong>Race: </strong>{% if char.race %}{{ char.race }}{% endif %}</li>
-        <li><strong>Class: </strong>{% if char.class_ %}{{ char.class_ }}{% endif %}</li>
-        <li><strong>Alive?</strong> {% if char.alive == "a" %}Yes{% else %}No{% endif %}</li>
-    </ul>
-</div>
-</details>  
-</section><!-- #keyInfo -->
+<section>
+    <h2>Key Information</h2>
+    <dl>
+        <div class="row">
+            <dt class="col-sm-2">Location</dt>
+            <dd class="col-sm">
+                {% if char.location %}
+                <a href="{{ url_for('locations.loc_detail', slug=char.location.slug) }}">
+                    {{ char.location.name }}
+                </a>
+                {% endif %}
+            </dd>
+        </div>
 
-<section id="notes">
-<details open>
-    <summary class="detailSummary"><h2>Notes</h2></summary>
-    <div class="card card-body" id="charNotes"></div>
-</details>
-</section><!-- #notes -->
+        <div class="row">
+            <dt class="col-sm-2">Race</dt>
+            <dd class="col-sm">{% if char.race %}{{ char.race }}{% endif %}</dd>
+        </div>
+
+        <div class="row">
+            <dt class="col-sm-2">Class</dt>
+            <dd class="col-sm">{% if char.class_ %}{{ char.class_ }}{% endif %}</dd>
+        </div>
+
+        <div class="row">
+            <dt class="col-sm-2">Alive</dt>
+            <dd class="col-sm">{% if char.alive == "a" %}Yes{% else %}No{% endif %}</dd>
+        </div>
+    </dl>
+</section>
+
+<section class="notes">
+    {% if char.notes %}
+        <h2>Notes</h2>
+        <div class="container-fluid">
+            <div id="charNotes"></div>
+        </div>
+        {% endif %}
+    </section>
 
 </article>
 </div><!-- .container -->
+</main>
 
 <hr>
 <a class="btn btn-primary mb-2" href="{{ url_for('characters.char_edit', slug=char.slug) }}">Edit</a>
