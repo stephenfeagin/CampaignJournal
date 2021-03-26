@@ -10,10 +10,6 @@
 <a class="btn btn-primary" href="{{ url_for('locations.loc_edit', slug=loc.slug) }}">Edit</a>
 <hr>
 
-<!-- <div class="row">
-
-<div class="col-4 border bg-light" id="location-sidebar">
-<div class="row"> -->
 <div class="card float-md-left m-2 p-2">
     <section>
         <h3>Parent Location</h3>
@@ -58,15 +54,14 @@
 </div>
     
 <main>
-    
     <section class="notes p-2">
         {% if loc.notes %}
             <div class="container-fluid">
                 <div id="loc-notes"></div>
             </div>
-            {% endif %}
-        </section>
-    </main>
+        {% endif %}
+    </section>
+</main>
 
 <footer>
 <hr>
