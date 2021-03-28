@@ -1,5 +1,6 @@
+import xml.etree.ElementTree as ET
 from datetime import datetime
-from typing import List, NoReturn
+from typing import List, NoReturn, Optional
 
 from flask_mongoengine import Document
 from mongoengine import DateTimeField, ListField, ReferenceField, StringField
@@ -50,6 +51,27 @@ class Location(BaseDocument):
 
     def get_characters(self):
         return Character.objects(location=self)
+
+    def descendant_tree(self) -> ET.Element:
+        li = ET.Element("li")
+        li.text = self.name
+        children = self.get_children()
+        if not children:
+            return li
+        ul = ET.SubElement(li, "ul")
+        for child in children:
+            ul.append(child.descendant_tree())
+        return li
+
+    @classmethod
+    def location_tree(cls) -> Optional[ET.Element]:
+        locs = cls.objects(parent=None)
+        if not locs:
+            return
+        ul = ET.Element("ul")
+        for loc in locs:
+            ul.append(loc.descendant_tree())
+        return ul
 
     def __repr__(self):
         return f"<Location: {self.name}>"
