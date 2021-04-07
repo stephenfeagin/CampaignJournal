@@ -83,3 +83,8 @@ class Note(BaseDocument):
     notes = StringField()
 
     meta = {"ordering": ["-updated"]}
+
+
+class Faction(BaseDocument):
+    name = StringField(required=True, unique=True)
+    notes = StringField()

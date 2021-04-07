@@ -4,7 +4,7 @@ import markdown
 from flask import Flask
 from flask_mongoengine import MongoEngine
 
-from . import auth, characters, core, documents, locations, notes
+from . import auth, characters, core, documents, factions, locations, notes
 
 
 def create_app(test_config=None) -> Flask:
@@ -30,6 +30,7 @@ def create_app(test_config=None) -> Flask:
     app.register_blueprint(auth.bp)
     app.register_blueprint(characters.bp)
     app.register_blueprint(core.bp)
+    app.register_blueprint(factions.bp)
     app.register_blueprint(locations.bp)
     app.register_blueprint(notes.bp)
 

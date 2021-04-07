@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import NoReturn, Union
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, TextAreaField
 from wtforms.validators import InputRequired
